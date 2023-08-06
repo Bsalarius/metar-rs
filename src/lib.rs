@@ -44,7 +44,7 @@ pub struct Metar {
     /// The current vertical visibility, in feet
     pub vert_visibility: Option<VertVisibility>,
     /// The current weather conditions
-    pub weather: Vec<Weather>,
+    pub weather: Data<Vec<Weather>>,
     /// The current temperature
     pub temperature: Data<i32>,
     /// The current dewpoint

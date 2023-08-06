@@ -56,7 +56,7 @@ impl<'i> From<Pair<'i, Rule>> for Metar {
             clouds: Known(Clouds::NoCloudDetected),
             cloud_layers: Vec::new(),
             vert_visibility: None,
-            weather: Vec::new(),
+            weather: Known(Vec::new()),
             temperature: Unknown,
             dewpoint: Unknown,
             pressure: Unknown,
@@ -123,7 +123,20 @@ impl<'i> From<Pair<'i, Rule>> for Metar {
                                         }
                                     }
                                 }
-                                Rule::wx => metar.weather.push(Weather::from(c)),
+                                Rule::wx_or_undetermined => {
+                                    if c.as_str() == "//" {
+                                        metar.weather = Unknown;
+                                    } else {
+                                        for wx in c.into_inner() {
+                                            metar.weather = Known(Vec::new());
+                                            let inner_weather = metar.weather.unwrap_mut();
+                                            match wx.as_rule() {
+                                                Rule::wx => inner_weather.push(Weather::from(wx)),
+                                                _ => unreachable!(),
+                                            }
+                                        }
+                                    }
+                                },
                                 Rule::cloud => {
                                     metar.clouds = Known(Clouds::CloudLayers);
                                     metar.cloud_layers.push(CloudLayer::from(c));

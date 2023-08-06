@@ -1,5 +1,6 @@
 metar = {
     SOI ~
+    "METAR"? ~
     station ~
     observation_time ~
     (method)? ~
@@ -84,9 +85,9 @@ atmos_condition = {
      restricted_visibility_horizontal* ~
      rvr* ~
      ("CLR" |
-      (wx)* ~
-      (visibility_vertical)? ~
-      ("NCD" |"NSC" | (cloud)*)))
+      (wx_or_undetermined ~
+       (visibility_vertical)? ~
+       ("NCD" |"NSC" | (cloud)*))))
 }
 
 visibility_horizontal = @{
@@ -129,6 +130,10 @@ rvr_visibility = @{
 
 rvr_trend = @{
     "D" | "U" | "N"
+}
+
+wx_or_undetermined = ${
+    "//" | wx*
 }
 
 wx = ${

@@ -171,6 +171,8 @@ pub enum WeatherIntensity {
 #[derive(PartialEq, Eq, Clone, Debug)]
 /// Descriptor of weather
 pub enum WeatherCondition {
+    /// Undetermined weather (//)
+    Undetermined,
     /// Descriptor - Shallow (MI)
     Shallow,
     /// Descriptor - Partial (PR)
